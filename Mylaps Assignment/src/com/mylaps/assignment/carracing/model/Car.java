@@ -1,11 +1,10 @@
 package com.mylaps.assignment.carracing.model;
 
-import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import com.mylaps.assignment.carracing.control.TimingSystem;
 
-public class Car implements Runnable {
+public class Car extends Thread {
 
 	private final double BASE_SPEED = 40.0; // in m/s
 
@@ -16,9 +15,8 @@ public class Car implements Runnable {
 	private double currentPosition; // in meters
 	private int numberOfLapsToGo;
 	private long lapTime; // in milliseconds
-	private Vector<Long> lapTimes;
 
-	private Thread t;
+	//private Thread t;
 
 	public Car(int kartNumber, int numberOfLaps, int lapLength) {
 		this.kartNumber = kartNumber;
@@ -43,14 +41,21 @@ public class Car implements Runnable {
 	}
 
 	private void newLap() {
+		
+		if (currentLap > 0) {
+			TimingSystem.getInstance().registerLapTime(this.kartNumber, currentLap, lapTime);
+			System.out.println("Kart #" + this.kartNumber + " has finished the lap #" + currentLap);
+			numberOfLapsToGo--;
+		}
+		
 		lapTime = 0;
 		currentPosition = 0;
 		currentLap++;
-		numberOfLapsToGo--;
+		
 
 		setSpeed(Math.random() * 5 + BASE_SPEED);
 
-		System.out.println("Kart #" + this.kartNumber + " has finished the lap #" + currentLap);
+		
 	}
 
 	public void run() {
@@ -76,8 +81,8 @@ public class Car implements Runnable {
 			double delta = speed * elapsedTimeInMillis / 1000;
 			currentPosition += delta;
 
-			System.out.println(
-					"Kart #" + kartNumber + " current position:" + currentPosition + " " + estimatedTime + " " + delta);
+			//System.out.println(
+				//	"Kart #" + kartNumber + " current position:" + currentPosition + " " + estimatedTime + " " + delta);
 			if (currentPosition >= lapLength) {
 				newLap();
 			}
@@ -85,12 +90,12 @@ public class Car implements Runnable {
 		System.out.println("Thread " + kartNumber + " is exiting.");
 	}
 
-	public void start() {
+/*	public void start() {
 		System.out.println("Starting " + kartNumber);
 		if (t == null) {
 			t = new Thread(this, "Thread #" + kartNumber);
 			t.start();
 		}
-	}
+	}*/
 
 }
