@@ -40,8 +40,12 @@ public class RaceResult {
 
 	@Override
 	public String toString() {
-		return "RaceResult [Winner=" + winner + ", fastestRaceTime=" + fastestRaceTime + ", fastestKartInTheRace="
-				+ fastestKartOfRace + "]";
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("\n--Race Result---------------------- ");
+		stringBuilder.append("\nFastest Race Time:" + fastestRaceTime);
+		stringBuilder.append("\nFastest Kart     :" + fastestKartOfRace);
+		stringBuilder.append(winner.toString());
+		return stringBuilder.toString();
 	}
 
 	public class Winner {
@@ -92,8 +96,15 @@ public class RaceResult {
 
 		@Override
 		public String toString() {
-			return "Winner [kartNumber=" + kartNumber + ", fastestLap=" + fastestLap + ", fastestLapTime="
-					+ fastestLapTime + ", raceTime=" + raceTime + "]";
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("\n--Winner--------------------------- ");
+			stringBuilder.append("\nKart Number      :" + kartNumber);
+			stringBuilder.append("\nFastest Lap #    :" + fastestLap);
+			stringBuilder.append("\nFastest Lap Time :" + fastestLapTime);
+			String rStr = raceTime == 0 ? "N/A" : Long.toString(raceTime);
+			stringBuilder.append("\nTotal Race Time  :" + rStr);
+			
+			return stringBuilder.toString();
 		}
 
 	}
